@@ -141,7 +141,7 @@ public class DirectionControlService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        unlockOrientationForAppClose();
+        turnOffForAppClose();
         super.onTaskRemoved(rootIntent);
     }
 
@@ -219,16 +219,15 @@ public class DirectionControlService extends Service {
         holderView = null;
     }
 
-    private void unlockOrientationForAppClose() {
+    private void turnOffForAppClose() {
         PreferenceManager pm = PreferenceManager.getInstance(this);
         pm.setOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        pm.setShowFloatingWindow(false);
         setSystemOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         updateFloatingWindow();
         DirectionControlController.requestTileRefresh(this);
         DirectionControlController.notifyStateChanged(this);
-        if (!pm.getShowFloatingWindow()) {
-            stopSelf();
-        }
+        stopSelf();
     }
 
     private void updateFloatingWindow() {

@@ -1,0 +1,90 @@
+name: Release APK
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag, for example v1.0.0. Leave empty to use v1.0.<run number>."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build and test
+        run: ./gradlew testDebugUnitTest lintDebug assembleRelease --warning-mode all
+
+      - name: Prepare release asset
+        id: asset
+        env:
+          REQUESTED_TAG: ${{ inputs.tag }}
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            tag="${GITHUB_REF_NAME}"
+          elif [[ -n "${REQUESTED_TAG}" ]]; then
+            tag="${REQUESTED_TAG}"
+          else
+            tag="v1.0.${GITHUB_RUN_NUMBER}"
+          fi
+
+          mkdir -p release
+          cp app/build/outputs/apk/release/app-release.apk "release/DirectionControl-${tag}.apk"
+          sha256sum "release/DirectionControl-${tag}.apk" > "release/DirectionControl-${tag}.apk.sha256"
+          {
+            echo "Automated cloud build for DirectionControl."
+            echo
+            echo "APK SHA256:"
+            echo '```'
+            cat "release/DirectionControl-${tag}.apk.sha256"
+            echo '```'
+          } > "release/notes-${tag}.md"
+
+          {
+            echo "tag=${tag}"
+            echo "apk=release/DirectionControl-${tag}.apk"
+            echo "sha=release/DirectionControl-${tag}.apk.sha256"
+            echo "notes=release/notes-${tag}.md"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DirectionControl-${{ steps.asset.outputs.tag }}
+          path: |
+            ${{ steps.asset.outputs.apk }}
+            ${{ steps.asset.outputs.sha }}
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          tag="${{ steps.asset.outputs.tag }}"
+          gh release create "${tag}" \
+            "${{ steps.asset.outputs.apk }}" \
+            "${{ steps.asset.outputs.sha }}" \
+            --target "${GITHUB_SHA}" \
+            --title "DirectionControl ${tag}" \
+            --notes-file "${{ steps.asset.outputs.notes }}" \
+            --latest
