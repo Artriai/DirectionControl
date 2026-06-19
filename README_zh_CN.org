@@ -1,0 +1,36 @@
+#+title: 方向控制
+
+方向控制是一个小型 Android 工具，用悬浮箭头和快捷设置磁贴来控制屏幕方向。
+
+** 功能
+
+- 悬浮箭头会跟随当前设备物理朝向。
+- 点击箭头锁定到当前检测到的方向；再次点击解除锁定。
+- 箭头可拖动，并自动吸附到屏幕边缘，横竖屏切换后更容易找到。
+- 长按箭头可重置位置。
+- 快捷设置磁贴用于显示或隐藏悬浮箭头。
+- 关闭悬浮箭头或关闭应用任务时会解除方向锁定。
+- 应用本身分别优化了竖屏和横屏布局，而不是简单拉伸。
+
+** 包名
+
+- Application ID: =app.directioncontrol=
+- 最低系统版本：Android 5.0 / API 21
+
+** 构建
+
+#+begin_src shell
+./gradlew assembleRelease
+#+end_src
+
+默认 release 构建会使用本机 debug keystore 签名，方便本地测试安装：
+
+#+begin_src shell
+adb install -r app/build/outputs/apk/release/app-release.apk
+#+end_src
+
+正式分发前，请替换为你自己的 release keystore。
+
+** 许可证
+
+本项目使用 GNU General Public License v3.0 或更高版本授权。详见 [[./LICENSE][LICENSE]]。

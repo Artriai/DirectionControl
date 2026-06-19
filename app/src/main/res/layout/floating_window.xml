@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_floating_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/bg_floating"
+    android:padding="7dp"
+    android:gravity="center"
+    android:elevation="8dp">
+
+    <ImageView
+        android:id="@+id/btn_floating_arrow"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@drawable/ic_orientation_arrow"
+        android:contentDescription="@string/floating_arrow_desc"
+        android:tint="#FFFFFFFF"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="7dp" />
+
+</LinearLayout>

@@ -1,0 +1,38 @@
+#+title: DirectionControl
+
+[[./README_zh_CN.org][简体中文]]
+
+DirectionControl is a small Android utility for controlling screen orientation from a floating arrow and a Quick Settings tile.
+
+** Features
+
+- Floating arrow that follows the current physical orientation.
+- Tap the arrow to lock to the detected orientation; tap again to unlock.
+- Drag the arrow and snap it to a screen edge for easier reach.
+- Long press the arrow to reset its position.
+- Quick Settings tile to show or hide the floating arrow.
+- The app clears the orientation lock when the floating arrow is closed or the app task is closed.
+- Portrait and landscape layouts are optimized separately instead of simply stretching one layout.
+
+** Package
+
+- Application ID: =app.directioncontrol=
+- Minimum Android version: Android 5.0 / API 21
+
+** Build
+
+#+begin_src shell
+./gradlew assembleRelease
+#+end_src
+
+The default release build is signed with the local debug keystore so it can be installed for local testing:
+
+#+begin_src shell
+adb install -r app/build/outputs/apk/release/app-release.apk
+#+end_src
+
+For public distribution, replace the debug signing config with your own release keystore.
+
+** License
+
+This project is licensed under the GNU General Public License v3.0 or later. See [[./LICENSE][LICENSE]].

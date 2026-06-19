@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">方向控制</string>
+    <string name="orientation_default">默认</string>
+    <string name="orientation_landscape">横屏</string>
+    <string name="orientation_reverse_landscape">反转横屏</string>
+    <string name="orientation_portrait">竖屏</string>
+    <string name="orientation_reverse_portrait">反转竖屏</string>
+    <string name="running_notification_channel_name">运行通知</string>
+    <string name="running_notification_title">方向控制正在运行中</string>
+    <string name="running_notification_description">方向控制可随时快速切换屏幕方向</string>
+    <string name="permission_required">请允许在其他应用上层显示权限</string>
+    <string name="quick_settings_tile_label">方向控制</string>
+    <string name="status_title">状态</string>
+    <string name="status_permission_required">需要权限</string>
+    <string name="status_permission_detail">悬浮箭头不可用</string>
+    <string name="status_unlocked">未锁定</string>
+    <string name="status_locked">已锁定</string>
+    <string name="status_locked_detail">%1$s · %2$s</string>
+    <string name="settings_title">设置</string>
+    <string name="setting_show_floating">显示朝向悬浮箭头</string>
+    <string name="setting_qs_tile">快捷设置磁贴</string>
+    <string name="setting_qs_tile_desc">在下拉控制中心显示或隐藏悬浮箭头</string>
+    <string name="setting_qs_tile_add">添加磁贴</string>
+    <string name="setting_qs_tile_added">已添加</string>
+    <string name="setting_unlock_orientation">解除方向锁定</string>
+    <string name="setting_unlock_action">解除</string>
+    <string name="setting_unlocked_action">未锁定</string>
+    <string name="setting_reset_position">重置箭头位置</string>
+    <string name="setting_reset_action">重置</string>
+    <string name="setting_reset_position_done">箭头位置已重置</string>
+    <string name="tile_floating_on">悬浮箭头已开启</string>
+    <string name="tile_floating_off">悬浮箭头已关闭</string>
+    <string name="tile_click_to_show_floating">点击显示箭头</string>
+    <string name="tile_locked_click_to_hide_floating">已锁定 · 点击隐藏箭头</string>
+    <string name="tile_unlocked_click_to_hide_floating">未锁定 · 点击隐藏箭头</string>
+    <string name="floating_arrow_desc">锁定到当前设备朝向</string>
+    <string name="floating_arrow_unlock_desc">解除当前设备朝向锁定</string>
+</resources>
