@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         if (!isChangingConfigurations()) {
-            DirectionControlController.setOrientation(this, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            DirectionControlController.setFloatingWindowVisible(this, false);
         }
         super.onDestroy();
     }

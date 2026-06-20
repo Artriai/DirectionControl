@@ -41,7 +41,7 @@ public class PreferenceManager {
         if (name == null) {
             return;
         }
-        preferences.edit().putInt(name, value).apply();
+        preferences.edit().putInt(name, value).commit();
     }
 
     public void setOrientation(int orientation) {
@@ -54,7 +54,7 @@ public class PreferenceManager {
     }
 
     public void setShowFloatingWindow(boolean show) {
-        preferences.edit().putBoolean(KEY_SHOW_FLOATING_WINDOW, show).apply();
+        preferences.edit().putBoolean(KEY_SHOW_FLOATING_WINDOW, show).commit();
     }
 
     public boolean getShowFloatingWindow() {
