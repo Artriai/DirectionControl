@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import app.directioncontrol.preference.PreferenceManager;
 import app.directioncontrol.service.OrientationTileService;
+import android.net.Uri;
 import app.directioncontrol.utils.ContextUtils;
 import app.directioncontrol.utils.DirectionControlController;
 import app.directioncontrol.utils.PermissionUtils;
@@ -140,6 +141,16 @@ public class MainActivity extends Activity {
         bindClick(R.id.ll_action_unlock, v -> unlockOrientation());
         bindClick(R.id.ll_action_reset_position, v -> resetFloatingPosition());
         bindClick(R.id.ll_setting_tile, v -> requestAddTile());
+        bindClick(R.id.btn_github, v -> openGitHub());
+    }
+
+    private void openGitHub() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Artriai/DirectionControl"));
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Unable to open browser", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void bindClick(int viewId, View.OnClickListener listener) {

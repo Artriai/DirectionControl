@@ -14,6 +14,7 @@ import app.directioncontrol.R;
 import app.directioncontrol.preference.PreferenceManager;
 import app.directioncontrol.utils.DirectionControlController;
 import app.directioncontrol.utils.PermissionUtils;
+import app.directioncontrol.utils.SimpleLog;
 
 import androidx.annotation.RequiresApi;
 
@@ -103,12 +104,23 @@ public class OrientationTileService extends TileService {
 
         boolean hasPermission = PermissionUtils.isDrawOverlaysPermissionGranted(this);
         PreferenceManager preferenceManager = PreferenceManager.getInstance(this);
-        boolean showFloating = sHasBroadcastState
-                ? sBroadcastShowFloating
-                : preferenceManager.getShowFloatingWindow();
-        int orientation = sHasBroadcastState
-                ? sBroadcastOrientation
-                : preferenceManager.getOrientation();
+        boolean showFloating;
+        int orientation;
+        if (!sHasBroadcastState && !DirectionControlService.isServiceRunning()) {
+            showFloating = false;
+            orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+            preferenceManager.setShowFloatingWindow(false);
+            preferenceManager.setOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        } else {
+            showFloating = sHasBroadcastState
+                    ? sBroadcastShowFloating
+                    : preferenceManager.getShowFloatingWindow();
+            orientation = sHasBroadcastState
+                    ? sBroadcastOrientation
+                    : preferenceManager.getOrientation();
+        }
+        SimpleLog.d("OrientationTileService", "updateTile: sHasBroadcastState=" + sHasBroadcastState + ", sBroadcastShowFloating=" + sBroadcastShowFloating + ", getShowFloatingWindow=" + preferenceManager.getShowFloatingWindow());
+        SimpleLog.d("OrientationTileService", "updateTile: showFloating=" + showFloating + ", orientation=" + orientation);
         boolean locked = orientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
         tile.setLabel(getString(showFloating ? R.string.tile_floating_on : R.string.tile_floating_off));
 

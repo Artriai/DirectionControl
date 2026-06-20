@@ -31,6 +31,20 @@
                 android:textColor="?android:textColorPrimary"
                 android:textSize="28sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/btn_github"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="4dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_info"
+                android:tint="?android:textColorSecondary"
+                android:contentDescription="@string/github_repo"
+                android:clickable="true"
+                android:focusable="true" />
         </RelativeLayout>
 
         <TextView

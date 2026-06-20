@@ -9,7 +9,7 @@ public class SimpleLog {
         if (!BuildConfig.DEBUG) {
             return;
         }
-        Log.d(tag, content);
+        Log.i(tag, content);
     }
 
     private SimpleLog() {

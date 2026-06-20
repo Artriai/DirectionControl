@@ -36,4 +36,5 @@
     <string name="tile_unlocked_click_to_hide_floating">Unlocked · click to hide arrow</string>
     <string name="floating_arrow_desc">Lock to current device orientation</string>
     <string name="floating_arrow_unlock_desc">Unlock current device orientation</string>
+    <string name="github_repo">GitHub Repository</string>
 </resources>

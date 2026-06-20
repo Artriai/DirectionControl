@@ -141,7 +141,7 @@ class FloatingArrowWindow {
         int maxX = Math.max(0, displaySize.x - getFloatingViewWidth());
         int maxY = Math.max(0, displaySize.y - getFloatingViewHeight());
 
-        if (pm.hasFloatingPositionRatio()) {
+        if (pm.hasFloatingPositionRatio() || !pm.hasFloatingXAndY()) {
             layoutParams.x = Math.round(clampRatio(pm.getFloatingXRatio()) * maxX);
             layoutParams.y = Math.round(clampRatio(pm.getFloatingYRatio()) * maxY);
         } else {
@@ -171,12 +171,17 @@ class FloatingArrowWindow {
 
     private void restoreInitialPixelPosition() {
         PreferenceManager pm = PreferenceManager.getInstance(context);
-        layoutParams.x = pm.getFloatingX();
-        layoutParams.y = pm.getFloatingY();
-
         Point displaySize = getDisplaySize();
         lastDisplayWidth = displaySize.x;
         lastDisplayHeight = displaySize.y;
+
+        if (pm.hasFloatingPositionRatio() || !pm.hasFloatingXAndY()) {
+            layoutParams.x = Math.round(clampRatio(pm.getFloatingXRatio()) * displaySize.x);
+            layoutParams.y = Math.round(clampRatio(pm.getFloatingYRatio()) * displaySize.y);
+        } else {
+            layoutParams.x = pm.getFloatingX();
+            layoutParams.y = pm.getFloatingY();
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

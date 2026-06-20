@@ -122,6 +122,10 @@ public class DirectionControlService extends Service {
         return sServiceRunning && sFloatingWindowActive;
     }
 
+    public static boolean isServiceRunning() {
+        return sServiceRunning;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent == null ? null : intent.getAction();

@@ -94,6 +94,11 @@ public class PreferenceManager {
                 && preferences.contains(KEY_FLOATING_Y_RATIO);
     }
 
+    public boolean hasFloatingXAndY() {
+        return preferences.contains(KEY_FLOATING_X)
+                && preferences.contains(KEY_FLOATING_Y);
+    }
+
     public float getFloatingXRatio() {
         return preferences.getFloat(KEY_FLOATING_X_RATIO, 0f);
     }
