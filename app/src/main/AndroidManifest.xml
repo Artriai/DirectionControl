@@ -29,6 +29,7 @@
         </activity>
         <service android:name=".service.DirectionControlService"
                  android:exported="false"
+                 android:stopWithTask="true"
                  android:foregroundServiceType="specialUse">
             <property
                     android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
@@ -47,6 +48,13 @@
                     android:name="android.service.quicksettings.TOGGLEABLE_TILE"
                     android:value="true"/>
         </service>
+        <receiver
+                android:name=".StateChangeReceiver"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="${applicationId}.action.STATE_CHANGED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

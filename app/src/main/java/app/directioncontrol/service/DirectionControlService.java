@@ -109,6 +109,7 @@ public class DirectionControlService extends Service {
     @Override
     public void onDestroy() {
         SimpleLog.d(TAG, "unregister service receiver");
+        DirectionControlController.markInactive(this);
         unregisterReceiver(screenReceiver);
         removeOrientationLayout();
         removeFloatingWindow();
@@ -141,6 +142,7 @@ public class DirectionControlService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
+        SimpleLog.d(TAG, "task removed");
         turnOffForAppClose();
         super.onTaskRemoved(rootIntent);
     }
@@ -220,13 +222,9 @@ public class DirectionControlService extends Service {
     }
 
     private void turnOffForAppClose() {
-        PreferenceManager pm = PreferenceManager.getInstance(this);
-        pm.setOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-        pm.setShowFloatingWindow(false);
+        DirectionControlController.markInactive(this);
         setSystemOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         updateFloatingWindow();
-        DirectionControlController.requestTileRefresh(this);
-        DirectionControlController.notifyStateChanged(this);
         stopSelf();
     }
 

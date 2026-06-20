@@ -20,11 +20,37 @@ import androidx.annotation.RequiresApi;
 @RequiresApi(Build.VERSION_CODES.N)
 public class OrientationTileService extends TileService {
 
+    private static OrientationTileService sListeningService;
+
+    public static void refreshListeningTile() {
+        OrientationTileService service = sListeningService;
+        if (service != null) {
+            service.updateTile();
+        }
+    }
+
     @Override
     public void onStartListening() {
         super.onStartListening();
+        sListeningService = this;
         PreferenceManager.getInstance(this).setTileAdded(true);
         updateTile();
+    }
+
+    @Override
+    public void onStopListening() {
+        if (sListeningService == this) {
+            sListeningService = null;
+        }
+        super.onStopListening();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (sListeningService == this) {
+            sListeningService = null;
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -49,8 +75,7 @@ public class OrientationTileService extends TileService {
         }
 
         PreferenceManager preferenceManager = PreferenceManager.getInstance(this);
-        boolean shouldHideFloating = DirectionControlService.isFloatingWindowActive();
-        DirectionControlController.setFloatingWindowVisible(this, !shouldHideFloating);
+        DirectionControlController.setFloatingWindowVisible(this, !preferenceManager.getShowFloatingWindow());
         updateTile();
     }
 

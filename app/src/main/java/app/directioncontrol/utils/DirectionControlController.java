@@ -8,6 +8,7 @@ import android.os.Build;
 import android.service.quicksettings.TileService;
 
 import app.directioncontrol.BuildConfig;
+import app.directioncontrol.StateChangeReceiver;
 import app.directioncontrol.preference.PreferenceManager;
 import app.directioncontrol.service.DirectionControlService;
 import app.directioncontrol.service.OrientationTileService;
@@ -49,6 +50,15 @@ public class DirectionControlController {
         applyServiceState(appContext, pm.getOrientation(), true, true);
     }
 
+    public static void markInactive(Context context) {
+        Context appContext = context.getApplicationContext();
+        PreferenceManager pm = PreferenceManager.getInstance(appContext);
+        pm.setOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        pm.setShowFloatingWindow(false);
+        requestTileRefresh(appContext);
+        notifyStateChanged(appContext);
+    }
+
     private static void applyServiceState(Context appContext, int orientation, boolean showFloating,
             boolean resetFloatingPosition) {
         orientation = OrientationResolver.normalizeLockOrientation(orientation);
@@ -78,6 +88,10 @@ public class DirectionControlController {
         Intent intent = new Intent(ACTION_STATE_CHANGED);
         intent.setPackage(appContext.getPackageName());
         appContext.sendBroadcast(intent);
+
+        Intent receiverIntent = new Intent(ACTION_STATE_CHANGED);
+        receiverIntent.setComponent(new ComponentName(appContext, StateChangeReceiver.class));
+        appContext.sendBroadcast(receiverIntent);
     }
 
     public static void requestTileRefresh(Context context) {
