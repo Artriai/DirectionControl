@@ -3,6 +3,7 @@ package app.directioncontrol;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 
 import app.directioncontrol.service.OrientationTileService;
@@ -21,7 +22,12 @@ public class StateChangeReceiver extends BroadcastReceiver {
 
         SimpleLog.d(TAG, "refresh tile from state broadcast");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            OrientationTileService.refreshListeningTile();
+            boolean showFloating = intent.getBooleanExtra(
+                    DirectionControlController.EXTRA_SHOW_FLOATING_WINDOW, false);
+            int orientation = intent.getIntExtra(
+                    DirectionControlController.EXTRA_ORIENTATION,
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            OrientationTileService.refreshListeningTile(showFloating, orientation);
         }
         DirectionControlController.requestTileRefresh(context);
     }

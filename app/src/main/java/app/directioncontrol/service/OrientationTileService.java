@@ -21,8 +21,15 @@ import androidx.annotation.RequiresApi;
 public class OrientationTileService extends TileService {
 
     private static OrientationTileService sListeningService;
+    private static boolean sHasBroadcastState;
+    private static boolean sBroadcastShowFloating;
+    private static int sBroadcastOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 
-    public static void refreshListeningTile() {
+    public static void refreshListeningTile(boolean showFloating, int orientation) {
+        sHasBroadcastState = true;
+        sBroadcastShowFloating = showFloating;
+        sBroadcastOrientation = orientation;
+
         OrientationTileService service = sListeningService;
         if (service != null) {
             service.updateTile();
@@ -75,7 +82,16 @@ public class OrientationTileService extends TileService {
         }
 
         PreferenceManager preferenceManager = PreferenceManager.getInstance(this);
-        DirectionControlController.setFloatingWindowVisible(this, !preferenceManager.getShowFloatingWindow());
+        boolean showFloating = sHasBroadcastState
+                ? sBroadcastShowFloating
+                : preferenceManager.getShowFloatingWindow();
+        boolean nextShowFloating = !showFloating;
+        sHasBroadcastState = true;
+        sBroadcastShowFloating = nextShowFloating;
+        sBroadcastOrientation = nextShowFloating
+                ? preferenceManager.getOrientation()
+                : ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+        DirectionControlController.setFloatingWindowVisible(this, nextShowFloating);
         updateTile();
     }
 
@@ -87,8 +103,13 @@ public class OrientationTileService extends TileService {
 
         boolean hasPermission = PermissionUtils.isDrawOverlaysPermissionGranted(this);
         PreferenceManager preferenceManager = PreferenceManager.getInstance(this);
-        boolean showFloating = preferenceManager.getShowFloatingWindow();
-        boolean locked = preferenceManager.getOrientation() != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+        boolean showFloating = sHasBroadcastState
+                ? sBroadcastShowFloating
+                : preferenceManager.getShowFloatingWindow();
+        int orientation = sHasBroadcastState
+                ? sBroadcastOrientation
+                : preferenceManager.getOrientation();
+        boolean locked = orientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
         tile.setLabel(getString(showFloating ? R.string.tile_floating_on : R.string.tile_floating_off));
 
         if (!hasPermission) {

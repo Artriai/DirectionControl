@@ -90,14 +90,6 @@ public class MainActivity extends Activity {
         super.onStop();
     }
 
-    @Override
-    protected void onDestroy() {
-        if (!isChangingConfigurations()) {
-            DirectionControlController.setFloatingWindowVisible(this, false);
-        }
-        super.onDestroy();
-    }
-
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private void registerStateReceiver() {
         if (stateReceiverRegistered) {

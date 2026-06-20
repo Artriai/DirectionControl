@@ -40,7 +40,8 @@
                 android:exported="true"
                 android:icon="@drawable/ic_stat_orientation"
                 android:label="@string/quick_settings_tile_label"
-                android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+                android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+                android:process=":tile">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE"/>
             </intent-filter>
@@ -50,11 +51,8 @@
         </service>
         <receiver
                 android:name=".StateChangeReceiver"
-                android:exported="false">
-            <intent-filter>
-                <action android:name="${applicationId}.action.STATE_CHANGED"/>
-            </intent-filter>
-        </receiver>
+                android:exported="false"
+                android:process=":tile"/>
     </application>
 
 </manifest>

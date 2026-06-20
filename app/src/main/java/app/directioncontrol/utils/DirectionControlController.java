@@ -16,6 +16,8 @@ import app.directioncontrol.service.OrientationTileService;
 public class DirectionControlController {
 
     public static final String ACTION_STATE_CHANGED = BuildConfig.APPLICATION_ID + ".action.STATE_CHANGED";
+    public static final String EXTRA_SHOW_FLOATING_WINDOW = "show_floating_window";
+    public static final String EXTRA_ORIENTATION = "orientation";
 
     private DirectionControlController() {
     }
@@ -85,12 +87,20 @@ public class DirectionControlController {
 
     public static void notifyStateChanged(Context context) {
         Context appContext = context.getApplicationContext();
+        PreferenceManager pm = PreferenceManager.getInstance(appContext);
+        boolean showFloating = pm.getShowFloatingWindow();
+        int orientation = pm.getOrientation();
+
         Intent intent = new Intent(ACTION_STATE_CHANGED);
         intent.setPackage(appContext.getPackageName());
+        intent.putExtra(EXTRA_SHOW_FLOATING_WINDOW, showFloating);
+        intent.putExtra(EXTRA_ORIENTATION, orientation);
         appContext.sendBroadcast(intent);
 
         Intent receiverIntent = new Intent(ACTION_STATE_CHANGED);
         receiverIntent.setComponent(new ComponentName(appContext, StateChangeReceiver.class));
+        receiverIntent.putExtra(EXTRA_SHOW_FLOATING_WINDOW, showFloating);
+        receiverIntent.putExtra(EXTRA_ORIENTATION, orientation);
         appContext.sendBroadcast(receiverIntent);
     }
 
