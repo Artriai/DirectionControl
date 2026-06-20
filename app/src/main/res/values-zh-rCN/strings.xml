@@ -36,4 +36,5 @@
     <string name="tile_unlocked_click_to_hide_floating">未锁定 · 点击隐藏箭头</string>
     <string name="floating_arrow_desc">锁定到当前设备朝向</string>
     <string name="floating_arrow_unlock_desc">解除当前设备朝向锁定</string>
+    <string name="github_repo">GitHub 仓库</string>
 </resources>
