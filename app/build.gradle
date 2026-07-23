@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
 }
 
+def releaseKeystorePath = System.getenv('DIRECTION_CONTROL_KEYSTORE_PATH')
+
 android {
     namespace = 'app.directioncontrol'
     compileSdk = 36
@@ -18,9 +20,22 @@ android {
         versionName = "1.0.6"
     }
 
+    signingConfigs {
+        if (releaseKeystorePath) {
+            sharedRelease {
+                storeFile = file(releaseKeystorePath)
+                storePassword = 'android'
+                keyAlias = 'androiddebugkey'
+                keyPassword = 'android'
+            }
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig = signingConfigs.debug
+            signingConfig = releaseKeystorePath
+                    ? signingConfigs.sharedRelease
+                    : signingConfigs.debug
             minifyEnabled = true
             shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

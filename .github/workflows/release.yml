@@ -31,6 +31,38 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Restore fixed release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.DIRECTION_CONTROL_KEYSTORE_BASE64 }}
+          EXPECTED_CERT_SHA256: "96:E7:4B:7D:22:16:78:92:5E:BA:8B:F5:07:2B:C2:60:B5:ED:C4:0A:E4:3A:73:2E:7B:E3:BF:B3:77:E6:74:B5"
+        shell: bash
+        run: |
+          if [[ -z "${KEYSTORE_BASE64}" ]]; then
+            echo "Missing DIRECTION_CONTROL_KEYSTORE_BASE64 repository secret." >&2
+            exit 1
+          fi
+
+          keystore_path="${RUNNER_TEMP}/direction-control-release.keystore"
+          printf '%s' "${KEYSTORE_BASE64}" | base64 --decode > "${keystore_path}"
+
+          actual_cert_sha256="$(
+            keytool -exportcert \
+              -keystore "${keystore_path}" \
+              -storepass android \
+              -alias androiddebugkey \
+              -rfc \
+              | openssl x509 -noout -fingerprint -sha256 \
+              | cut -d= -f2
+          )"
+          if [[ "${actual_cert_sha256}" != "${EXPECTED_CERT_SHA256}" ]]; then
+            echo "The configured keystore is not the Lyrics Plus signing key." >&2
+            echo "Expected certificate: ${EXPECTED_CERT_SHA256}" >&2
+            echo "Actual certificate:   ${actual_cert_sha256}" >&2
+            exit 1
+          fi
+
+          echo "DIRECTION_CONTROL_KEYSTORE_PATH=${keystore_path}" >> "${GITHUB_ENV}"
+
       - name: Build and test
         run: ./gradlew testDebugUnitTest lintDebug assembleRelease --warning-mode all
 
