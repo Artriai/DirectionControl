@@ -36,13 +36,25 @@ class OrientationMonitor {
     }
 
     void start() {
-        startOrientationDetection();
         startDisplayUpdates();
     }
 
     void stop() {
         stopOrientationDetection();
         stopDisplayUpdates();
+    }
+
+    /**
+     * Controls only the sensor-based orientation detection. While the screen
+     * orientation is locked there is no need to keep the sensor running, so
+     * callers should disable it to save battery and re-enable on unlock.
+     */
+    void setOrientationDetectionEnabled(boolean enabled) {
+        if (enabled) {
+            startOrientationDetection();
+        } else {
+            stopOrientationDetection();
+        }
     }
 
     @SuppressWarnings("deprecation")

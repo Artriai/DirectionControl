@@ -136,6 +136,7 @@ public class DirectionControlService extends Service {
             if (orientation != currentOrientation) {
                 setSystemOrientation(orientation);
             }
+            updateOrientationDetection();
         }
         updateFloatingWindow();
         if (resetFloatingPosition && floatingArrowWindow != null) {
@@ -246,6 +247,7 @@ public class DirectionControlService extends Service {
             if (orientationMonitor != null) {
                 orientationMonitor.start();
             }
+            updateOrientationDetection();
             scheduleFloatingArrowRefresh();
         } else {
             removeFloatingWindow();
@@ -258,6 +260,20 @@ public class DirectionControlService extends Service {
         }
         floatingArrowWindow.updateArrow(detectedDegrees, getDisplayRotationDegrees(),
                 currentOrientation == detectedOrientation);
+    }
+
+    /**
+     * Sensor-based orientation detection only runs while the floating window is
+     * active and no orientation lock is applied. Once locked, the sensor is
+     * stopped to save battery; it resumes automatically on unlock, re-syncing
+     * from the current display rotation.
+     */
+    private void updateOrientationDetection() {
+        if (orientationMonitor == null) {
+            return;
+        }
+        boolean locked = currentOrientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+        orientationMonitor.setOrientationDetectionEnabled(sFloatingWindowActive && !locked);
     }
 
     private void scheduleFloatingArrowRefresh() {
